@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html> 
+  <head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css" integrity="sha384-cLRrMq39HOZdvE0j6yBojO4+1PrHfB7a9l5qLcmRm/fiWXYY+CndJPmyu5FV/9Tw" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="app/app.css">
+    <title>中考艺术项目练习系统</title>
+  </head> 
+  <body class="mdui-bottom-nav-fixed mdui-theme-primary-indigo mdui-theme-accent-indigo"> 
+    <header class="mdui-appbar mdui-appbar-fixed mdui-shadow-2">
+      <div class="mdui-toolbar">
+        <span id="title" class="mdui-typo-title">中考美术练习</span>
+        <div class="mdui-toolbar-spacer"></div>
+        <button id="back" onclick="back()" class="mdui-btn mdui-btn-icon" style="display: none;" mdui-tooltip="{content: '返回'}">
+          <i class="mdui-icon material-icons">arrow_back</i>
+        </button>
+      </div>
+    </header>
+    
+    <div class="mdui-container">
+    <div id="home" style="margin-top: 65px;">
+      <div class="mdui-tab" mdui-tab>
+        <a href="#notice" class="mdui-ripple">更新公告</a>
+        <a href="#explain" class="mdui-ripple">系统说明</a>
+        <a href="#check" class="mdui-ripple">验证身份</a>
+      </div>
+      <div id="notice" class="mdui-p-a-2">
+        <p>当前版本：v1.1.0</p>
+        <p>更新内容：</p>
+        <p>新增美术全真中考题</p>
+        <p>已知BUG：</p>
+        <p>同时操作练习和测试概率页面加载异常</p>
+      </div>
+      <div id="explain" class="mdui-p-a-2">
+        <p>声明：</p>
+        <p>1.依照临沂市中考艺术项目研发此系统</p>
+        <p>2.试题来源于网络，如有侵权请告知删除</p>
+        <p>3.仅供内部人员使用</p>
+        <p>说明：</p>
+        <p>1.多项填空题作答时请将答案以1个空格分隔</p>
+        <p>2.部分功能还未实现，敬请期待</p>
+        <ul class="mdui-list" style="margin-left: -15px;margin-right: -15px;" mdui-menu="{target: '#menu_subject',align: 'right'}">
+          <li class="mdui-list-item mdui-ripple">
+            <div class="mdui-list-item-content" style="margin: 0px;">练习科目</div>
+            <div class="mdui-typo-caption-opacity">美术</div>
+          </li>
+        </ul>
+        <ul id="menu_subject" class="mdui-menu">
+          <li class="mdui-menu-item">
+            <a id="art" onclick="choice_subject()" class="mdui-ripple">美术</a>
+          </li>
+          <li class="mdui-menu-item">
+            <a id="music" onclick="choice_subject()" class="mdui-ripple">音乐</a>
+          </li>
+        </ul>
+      </div>
+      <div id="check" class="mdui-p-a-2">
+        <p>请输入验证码</p>
+        <div id="checkmd5" class="mdui-textfield mdui-textfield-floating-label" style="margin-top: -15px;">
+          <label class="mdui-textfield-label">验证码</label>
+          <input id="check_input" class="mdui-textfield-input" type="text" onchange="checkmd5()" required/>
+          <div class="mdui-textfield-error">验证码错误</div>
+          <div id="input_help" class="mdui-textfield-helper"></div>
+        </div>
+        <p>注意：</p>
+        <p>验证码每周更换1次，获取验证码请联系作者</p>
+      </div>
+    </div>
+    
+    <div id="practice" style="margin-top: 65px;display: none;">
+      <ul class="mdui-list">
+        <li id="list-choice" onclick="exam_open('practice-1','exam-choice')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">playlist_add_check</i>
+          <div id="div-choice" class="mdui-list-item-content">选择题</div>
+        </li>
+        <li id="list-judge" onclick="exam_open('practice-2','exam-judge')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">check_box</i>
+          <div id="div-judge" class="mdui-list-item-content">判断题</div>
+        </li>
+        <li id="list-write" onclick="exam_open('practice-3','exam-write')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">edit</i>
+          <div id="div-judge" class="mdui-list-item-content">填空题</div>
+        </li>
+        <li id="list-appreciate" onclick="exam_open('practice-4','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">remove_red_eye</i>
+          <div id="div-appreciate" class="mdui-list-item-content">赏析题</div>
+        </li>
+        <li id="list-practise" onclick="exam_open('practice-5','exam-practise')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">event_note</i>
+          <div id="div-practise" class="mdui-list-item-content">实践题</div>
+        </li>
+      </ul>
+    </div>
+    <div id="exam-choice" style="margin-top: 65px;display: none;">
+      <ul class="mdui-list">
+        <li onclick="exam_open('exam-choice-1','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">chrome_reader_mode</i>
+          <div class="mdui-list-item-content">基础知识</div>
+        </li>
+        <li onclick="exam_open('exam-choice-2','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">collections_bookmark</i>
+          <div class="mdui-list-item-content">作品作者</div>
+        </li>
+        <li onclick="exam_open('exam-choice-3','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">remove_red_eye</i>
+          <div class="mdui-list-item-content">作品赏析</div>
+        </li>
+        <li onclick="exam_open('exam-choice-4','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">more_horiz</i>
+          <div class="mdui-list-item-content">其他</div>
+        </li>
+      </ul>
+    </div>
+    <div id="exam-judge" style="margin-top: 65px;display: none;">
+      <ul class="mdui-list">
+        <li onclick="exam_open('exam-judge-1','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">chrome_reader_mode</i>
+          <div class="mdui-list-item-content">基础知识</div>
+        </li>
+        <li onclick="exam_open('exam-judge-2','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">collections_bookmark</i>
+          <div class="mdui-list-item-content">作品作者</div>
+        </li>
+        <li onclick="exam_open('exam-judge-3','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">remove_red_eye</i>
+          <div class="mdui-list-item-content">作品赏析</div>
+        </li>
+        <li onclick="exam_open('exam-judge-4','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">more_horiz</i>
+          <div class="mdui-list-item-content">其他</div>
+        </li>
+      </ul>
+    </div>
+    <div id="exam-write" style="margin-top: 65px;display: none;">
+      <ul class="mdui-list">
+        <li onclick="exam_open('exam-write-1','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">chrome_reader_mode</i>
+          <div class="mdui-list-item-content">基础知识</div>
+        </li>
+        <li onclick="exam_open('exam-write-2','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">collections_bookmark</i>
+          <div class="mdui-list-item-content">作品作者</div>
+        </li>
+        <li onclick="exam_open('exam-write-3','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">remove_red_eye</i>
+          <div class="mdui-list-item-content">作品赏析</div>
+        </li>
+        <li onclick="exam_open('exam-write-4','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">more_horiz</i>
+          <div class="mdui-list-item-content">其他</div>
+        </li>
+      </ul>
+    </div>
+    <div id="exam-practise" style="margin-top: 65px;display: none;">
+      <ul class="mdui-list">
+        <li class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">color_lens</i>
+          <div class="mdui-list-item-content">绘画</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">brush</i>
+          <div class="mdui-list-item-content">书法</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">content_cut</i>
+          <div class="mdui-list-item-content">手工</div>
+        </li>
+      </ul>
+    </div>
+    <div id="exam-list" style="margin-top: 65px;display: none;">
+      <ul class="mdui-list">
+        <li id="exam-list-1" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">filter_1</i>
+          <div class="mdui-list-item-content">第一部分</div>
+        </li>
+        <li id="exam-list-2" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">filter_2</i>
+          <div class="mdui-list-item-content">第二部分</div>
+        </li>
+        <li id="exam-list-3" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">filter_3</i>
+          <div class="mdui-list-item-content">第三部分</div>
+        </li>
+      </ul>
+    </div>
+    
+    <div id="test" style="margin-top: 65px;display: none;">
+      <ul class="mdui-list">
+        <li onclick="exam_open('test-1','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">collections_bookmark</i>
+          <div class="mdui-list-item-content">全真模拟题</div>
+        </li>
+        <li onclick="exam_open('test-1','exam-list')" class="mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">extension</i>
+          <div class="mdui-list-item-content">全真中考题</div>
+        </li>
+      </ul>
+    </div>
+    
+    <div id="setting" style="margin-top: 65px;display: none;">
+      <ul class="mdui-list" mdui-collapse="{accordion: true}">
+        <li id="preference" class="mdui-collapse-item">
+          <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">star</i>
+            <div class="mdui-list-item-content">试题分值</div>
+            <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+          </div>
+          <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+            <li class="mdui-list-item mdui-ripple">
+              <div class="mdui-list-item-content" style="margin-left: 0px;">选择题</div>
+              <div class="mdui-typo-caption-opacity">3分</div>
+            </li>
+            <li class="mdui-list-item mdui-ripple">
+              <div class="mdui-list-item-content" style="margin-left: 0px;">判断题</div>
+              <div class="mdui-typo-caption-opacity">3分</div>
+            </li>
+            <li class="mdui-list-item mdui-ripple">
+              <div class="mdui-list-item-content" style="margin-left: 0px;">填空题</div>
+              <div class="mdui-typo-caption-opacity">3分</div>
+            </li>
+            <li class="mdui-list-item mdui-ripple">
+              <div class="mdui-list-item-content" style="margin-left: 0px;">赏析题</div>
+              <div class="mdui-typo-caption-opacity">20分</div>
+            </li>
+            <li class="mdui-list-item mdui-ripple">
+              <div class="mdui-list-item-content" style="margin-left: 0px;">实践题</div>
+              <div class="mdui-typo-caption-opacity">20分</div>
+            </li>
+          </ul>
+        </li>
+        <li id="setting-feedback" class="mdui-list-item mdui-ripple" mdui-dialog="{target: '#feedback'}">
+          <i class="mdui-list-item-icon mdui-icon material-icons">supervisor_account</i>
+          <div class="mdui-list-item-content">反馈建议</div>
+        </li>
+        <li id="setting-about" class="mdui-list-item mdui-ripple" mdui-dialog="{target: '#about'}">
+          <i class="mdui-list-item-icon mdui-icon material-icons">info</i>
+          <div class="mdui-list-item-content">关于</div>
+        </li>
+      </ul>
+    </div>
+    <div id="feedback" class="mdui-dialog">
+      <div class="mdui-dialog-title">反馈建议</div>
+      <div class="mdui-dialog-content">
+        <form>
+          <div class="mdui-col">
+            <label class="mdui-radio">
+              <input id="feedback1" type="radio" name="feedback" checked/>
+              <i class="mdui-radio-icon"></i>
+              意见
+            </label>
+          </div>
+          <div class="mdui-col">
+            <label class="mdui-radio">
+              <input id="feedback2" type="radio" name="feedback"/>
+              <i class="mdui-radio-icon"></i>
+              问题
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="mdui-dialog-actions">
+        <button class="mdui-btn mdui-ripple" mdui-dialog-cancel>取消</button>
+        <button class="mdui-btn mdui-ripple" onclick="feedbackedit()" mdui-dialog-close>编辑</button>
+      </div>
+    </div>
+    <div id="about" class="mdui-dialog">
+      <ul class="mdui-list mdui-list-dense mdui-dialog-content">
+        <div class="mdui-typo-headline">主程序版本：v1.1.0</div>
+        <li class="mdui-list-item mdui-ripple">
+          <div class="mdui-typo-body-2" style="margin-left: 20px;">MDUI版本:1.0.1</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+          <div class="mdui-typo-body-2" style="margin-left: 20px;">jQuery版本:3.4.0</div>
+        </li>
+        <div class="mdui-divider"></div>
+        <li class="mdui-list-item mdui-ripple">
+          <div class="mdui-card mdui-shadow-0" style="margin-left: -16px;margin-right: -16px;">
+            <div class="mdui-card-header">
+              <i class="mdui-card-header-avatar mdui-icon material-icons">create</i>
+              <div class="mdui-card-header-title">@再别江陵</div>
+              <div class="mdui-card-header-subtitle">作者</div>
+            </div>
+            <div class="mdui-card-media">
+              <img src="src/image_about.jpg"/>
+            </div>
+            <div class="mdui-card-content">子曰：「有朋自远方来，不亦乐乎？」</div>
+            <div class="mdui-card-content">联系方式：email 2670530700@qq.com</div>
+          </div>
+        </li>
+      </ul>
+      <div class="mdui-dialog-actions">
+        <button class="mdui-btn mdui-ripple" mdui-dialog-close>确定</button>
+      </div>
+    </div>
+    
+    <div id="bottomnav" class="mdui-bottom-nav mdui-bottom-nav-text-auto mdui-shadow-2">
+      <a class="mdui-ripple mdui-bottom-nav-active">
+        <i class="mdui-icon material-icons">home</i>
+        <label>首页</label>
+      </a>
+      <a class="mdui-ripple">
+        <i class="mdui-icon material-icons">library_books</i>
+        <label>练习</label>
+      </a>
+      <a class="mdui-ripple">
+        <i class="mdui-icon material-icons">border_color</i>
+        <label>测试</label>
+      </a>
+      <a class="mdui-ripple">
+        <i class="mdui-icon material-icons">settings</i>
+        <label>设置</label>
+      </a>
+    </div> 
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js" integrity="sha384-gCMZcshYKOGRX9r6wbDrvF+TcCCswSHFucUzUPwka+Gr+uHgjlYvkABr95TCOz3A" crossorigin="anonymous"></script>
+  </body>
+  <script src="vConsole_main.js"></script>
+  <script src="app/md5.js"></script>
+  <script src="src/exam-practice.js"></script>
+  <script>
+    var originalnavids = ["home","practice","test","setting"];
+    var navids = ["home","practice","test","setting"];
+    var listids = ["list-choice","list-judge","list-appreciate","list-practise"];
+    var examids = ["exam-choice","exam-judge","exam-appreciate","exam-practise"];
+    var radioids = ["feedback1","feedback2"];
+    var radiovalues = ["意见","问题"];
+    var clicked = [];
+    var practiceopenid = [];
+    var testopenid = [];
+    var status = 0;
+    var subject = "art";
+    function checkAdultF(id) {
+      return id != thisid;
+    }
+    function checkAdultT(id) {
+      return id == thisid;
+    }
+    function checkAdultIn(id) {
+      return id.indexOf(thisid) != -1;
+    }
+  </script>
+  <script>
+    function back() {
+      console.log(oldnavid)
+      if (oldnavid=="practice") {
+        if (practiceopenid.length>1) {
+          document.getElementById(practiceopenid.pop()).style.display = "none";
+          practiceopenid.reverse();
+          document.getElementById(practiceopenid[0]).style.display = "";
+          if (practiceopenid.length==1) {
+            navids[1] = oldnavid;
+          }
+          practiceopenid.reverse();
+        }
+      }
+      else {
+        if (testopenid.length>1) {
+          document.getElementById(testopenid.pop()).style.display = "none";
+          testopenid.reverse();
+          document.getElementById(testopenid[0]).style.display = "";
+          if (testopenid.length==1) {
+            navids[2] = oldnavid;
+          }
+        }
+      }
+    }
+    function choice_subject() {
+      if (this.id!=subject) {
+        if (this.id=="art") {
+          
+        }
+        else {
+          
+        }
+      }
+    }
+    function checkmd5() {
+      var md5str = "18af54dcf5fa8ac547b8c5ff7579763d";
+      if (hex_md5(document.getElementById("check_input").value)==md5str) {
+        document.getElementById("checkmd5").classList.remove("mdui-textfield-invalid");
+        mdui.snackbar({
+          message: "验证码正确，欢迎使用！"
+        });
+        status = 1;
+      }
+      else {
+        document.getElementById("checkmd5").classList.add("mdui-textfield-invalid");
+        status = 0;
+      }
+    }
+    function exam_open(parent,child) {
+      if (parent.includes("test")) {
+        oldnavid = originalnavids[2];
+        testopenid.push(child);
+        navids[2] = child;
+      }
+      else {
+        oldnavid = originalnavids[1];
+        practiceopenid.push(child);
+        navids[1] = child;
+      }
+      if (child=="exam-list") {
+        document.getElementById("exam-list-1").setAttribute("onclick","window.open('" + parent + "-1.html')");
+        document.getElementById("exam-list-2").setAttribute("onclick","window.open('" + parent + "-2.html')");
+        document.getElementById("exam-list-3").setAttribute("onclick","window.open('" + parent + "-3.html')");
+      }
+      document.getElementById(parent.slice(0,-2)).style.display = "none";
+      document.getElementById(child).style.display = "";
+    }
+    function feedbackedit() {
+      for (index in radioids) {
+        var id = radioids[index];
+        if (document.getElementById(id).checked) {
+          url = "Mailto:2670530700@qq.com?Subject=辞海-意见反馈:" + radiovalues[index];
+          window.location.href = url;
+        }
+      }
+    }
+  </script>
+  <script>
+    mdui.$(".mdui-bottom-nav").on("change.mdui.bottomNav", function (e) {
+      var index = e._detail.index;
+      if (index==0||status==1) {
+        var navid = navids[index];
+        thisid = navid;
+        var newids = navids.filter(checkAdultF);
+        navid = thisid;
+        if (index==1||index==2) {
+          document.getElementById("back").style.display = "";
+        }
+        console.log(index)
+        if (index==1) {
+          if (practiceopenid[0]!=navid) {
+            practiceopenid[0] = "practice";
+          }
+        }
+        else if (index==2) {
+          if (testopenid[0]!=navid) {
+            testopenid[0] = "test";
+          }
+        }
+        else {
+          document.getElementById("back").style.display = "none";
+        }
+        for (idindex in newids) {
+          document.getElementById(newids[idindex]).style.display = "none";
+        }
+        document.getElementById(thisid).style.display = "";
+      }
+      else {
+        mdui.snackbar({
+          message: "验证码错误，请检查验证码"
+        });
+      }
+    });
+  </script>
+</html>
