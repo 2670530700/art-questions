@@ -1,0 +1,26 @@
+body {
+  background: #ffffff;
+}
+header {
+  background: #ffffff;
+}
+div {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;    
+}
+.mdui-chip {
+  margin-top: 15px;
+}
+.mdui-textfiel {
+  color: #3F51B5;
+}
+.mdui-list-item-content {
+  margin-left: 25px;
+}
+.mdui-bottom-nav {
+  background: #ffffff;
+}
+#loading {
+  position: absolute;
+}
