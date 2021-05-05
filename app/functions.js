@@ -68,10 +68,15 @@ var x = 0;
         }
         newdiv.classList.add("mdui-table-fluid");
         newdiv.setAttribute("id","score_list");
+        if (exams_info.exams_others!=undefined) {
+          var information = '<div class="mdui-card" style="margin-top: 20px;"><div class="mdui-card-header"><div class="mdui-card-header-title">示例</div></div><div class="mdui-card-content" style="margin-top: -30px;">' + exams_others[0].answer + '</div></div>';
+        }
+        else {
+          var information = "";
+        }
         newdiv.innerHTML = '<table class="mdui-table">' +
           '<thead><tr><th class="mdui-text-center">题号</th><th class="mdui-text-center">得分</th><th class="mdui-text-center">答案</th></tr></thead>' + text +
-          '<thead><tr><td class="mdui-text-center">总分</td><td class="mdui-text-center">' + scores.reduce(getSum).toString() + '</td></tr></thead></table>' +
-          '<div class="mdui-card" style="margin-top: 20px;"><div class="mdui-card-header"><div class="mdui-card-header-title">示例</div></div><div class="mdui-card-content" style="margin-top: -30px;">' + exams_others[0].answer + '</div></div>';
+          '<thead><tr><td class="mdui-text-center">总分</td><td class="mdui-text-center">' + scores.reduce(getSum).toString() + '</td></tr></thead></table>' + information;
         parent.appendChild(newdiv);
     }
 var newdiv = document.createElement("div");
@@ -148,11 +153,17 @@ var newdiv = document.createElement("div");
           var information = '';
         }
       }
-      if (thisdata[index].image!=undefined) {
-        imagetext = '<div class="mdui-card-media"><img src="' + thisdata[index].image + '"/></div>';
-      }
-      else {
-        imagetext = "";
+      imagetext = "";
+      var image = thisdata[index].image;
+      if (image!=undefined) {
+        if (typeof image=="string") {
+          imagetext = '<div class="mdui-card-media"><img src="' + image + '"/></div>';
+        }
+        else {
+          for (index_ in image) {
+            imagetext = imagetext + '<div class="mdui-card-media"><img src="' + image[index_] + '" style="height:300px;"/></div>';
+          }
+        }
       }
       newdiv.innerHTML = '<div class="mdui-card-header">' +
         '<div class="mdui-card-header-title">第' + parseInt(x).toString() + '题</div></div>' +
