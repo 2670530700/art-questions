@@ -15,6 +15,7 @@
       <div class="mdui-toolbar">
         <span id="title" class="mdui-typo-title">中考美术练习</span>
         <div class="mdui-toolbar-spacer"></div>
+        <span id="timer" style="display: ;"></span>
         <button id="back" onclick="back()" class="mdui-btn mdui-btn-icon" style="display: none;" mdui-tooltip="{content: '返回'}">
           <i class="mdui-icon material-icons">arrow_back</i>
         </button>
@@ -29,18 +30,21 @@
         <a href="#check" class="mdui-ripple">验证身份</a>
       </div>
       <div id="notice" class="mdui-p-a-2">
-        <p>当前版本：v1.1.2</p>
-        <p>更新内容：</p>
-        <p>补全选择题基础知识和作品作者部分</p>
-        <p>已知BUG：</p>
+        <h4>当前版本：v1.1.4</h4>
+        <h4>更新内容：</h4>
+        <p>新增选择题-基础知识和作品作者</p>
+        <h4>特别公告：</h4>
+        <p>可使用的题库：选择题-基础知识和作品作者；全真中考题</p>
+        <p>注意：选择不存在的题库将弹出404</p>
+        <h4>已知BUG：</h4>
         <p>同时操作练习和测试概率页面加载异常</p>
       </div>
       <div id="explain" class="mdui-p-a-2">
-        <p>声明：</p>
+        <h4>声明：</h4>
         <p>1.依照临沂市中考艺术项目研发此系统</p>
         <p>2.试题来源于网络，如有侵权请告知删除</p>
         <p>3.仅供内部人员使用</p>
-        <p>说明：</p>
+        <h4>说明：</h4>
         <p>1.多项填空题作答时请将答案以1个空格分隔</p>
         <p>2.部分功能还未实现，敬请期待</p>
         <ul class="mdui-list" style="margin-left: -15px;margin-right: -15px;" mdui-menu="{target: '#menu_subject',align: 'right'}">
@@ -66,8 +70,10 @@
           <div class="mdui-textfield-error">验证码错误</div>
           <div id="input_help" class="mdui-textfield-helper"></div>
         </div>
-        <p>注意：</p>
+        <h4>注意：</h4>
         <p>验证码每周更换1次，获取验证码请联系作者</p>
+        <h4>提示：</h4>
+        <p>验证码-作者的姓名拼音</p>
       </div>
     </div>
     
@@ -269,7 +275,7 @@
     </div>
     <div id="about" class="mdui-dialog">
       <ul class="mdui-list mdui-list-dense mdui-dialog-content">
-        <div class="mdui-typo-headline">主程序版本：v1.1.2</div>
+        <div class="mdui-typo-headline">主程序版本：v1.1.4</div>
         <li class="mdui-list-item mdui-ripple">
           <div class="mdui-typo-body-2" style="margin-left: 20px;">MDUI版本:1.0.1</div>
         </li>
@@ -333,6 +339,9 @@
     var testopenid = [];
     var status = 0;
     var subject = "art";
+    var oBox= document.getElementById('timer');
+    var maxtime = (new Date("2021-5-8 8:00:00") - new Date()) / 1000;
+    console.log(maxtime)
     function checkAdultF(id) {
       return id != thisid;
     }
@@ -344,6 +353,26 @@
     }
   </script>
   <script>
+    function CountDown() {
+      if (maxtime >= 0) {
+        hours = Math.floor(maxtime / 60 / 60);
+        minutes = Math.floor(maxtime / 60  % 60);
+        seconds = Math.floor(maxtime % 60);
+        if (seconds.toString().length==1) {
+          seconds = "0" + seconds;
+        }
+        msg = "距离考试还有 " + hours + ":" + minutes + ":" + seconds;
+        oBox.innerHTML = msg;
+        --maxtime;
+      }
+      else {
+        clearInterval(timer);
+        mdui.snackbar({
+          message: "笔试已结束"
+        });
+      }
+    }
+    timer = setInterval("CountDown()", 1000);
     function back() {
       console.log(oldnavid)
       if (oldnavid=="practice") {
@@ -374,12 +403,14 @@
           
         }
         else {
-          
+          mdui.snackbar({
+            message: "该功能还未完成，敬请期待"
+          });
         }
       }
     }
     function checkmd5() {
-      var md5str = "18af54dcf5fa8ac547b8c5ff7579763d";
+      var md5str = "31ea2505e4d00f915b847e65b1e5e445";
       if (hex_md5(document.getElementById("check_input").value)==md5str) {
         document.getElementById("checkmd5").classList.remove("mdui-textfield-invalid");
         mdui.snackbar({
@@ -430,6 +461,7 @@
         var newids = navids.filter(checkAdultF);
         navid = thisid;
         if (index==1||index==2) {
+          oBox.style.display = "none";
           document.getElementById("back").style.display = "";
         }
         console.log(index)
@@ -445,6 +477,7 @@
         }
         else {
           document.getElementById("back").style.display = "none";
+          oBox.style.display = "";
         }
         for (idindex in newids) {
           document.getElementById(newids[idindex]).style.display = "none";
