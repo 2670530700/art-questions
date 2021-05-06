@@ -79,6 +79,27 @@ var x = 0;
           '<thead><tr><td class="mdui-text-center">总分</td><td class="mdui-text-center">' + scores.reduce(getSum).toString() + '</td></tr></thead></table>' + information;
         parent.appendChild(newdiv);
     }
+var newbtn = document.createElement("button");
+newbtn.classList.add("mdui-btn","mdui-btn-raised","mdui-ripple");
+newbtn.setAttribute("style","position: absolute;z-index: 10;margin-left: 240px;margin-top: -40px")
+newbtn.onclick = function recite() {
+      var i=0;
+      for (;i<imax;i+=1) {
+        var answer = exams_choice[i].answer;
+        console.log("choice"+i.toString()+"-"+(answer+1).toString())
+        document.getElementById("choice"+i.toString()+"-"+(answer+1).toString()).checked = "true";
+      }
+      for (var x=0;x<xmax;x+=1) {
+        var answer = exams_judge[x].answer;
+        document.getElementById("judge"+x.toString()+"-"+answer.toString()).checked = "true";
+      }
+      for (var y=0;y<ymax;y+=1) {
+        var answer = exams_write[y].answer;
+        document.getElementById("check_input-"+y.toString()).value = answer;
+      }
+    };
+newbtn.innerHTML = "背题模式";
+parent.appendChild(newbtn);
 var newdiv = document.createElement("div");
     newdiv.setAttribute("style","margin-top: 20px;");
     newdiv.classList.add("mdui-card");
@@ -140,14 +161,14 @@ var newdiv = document.createElement("div");
       }
       //提示错误
       else if (name=="exams_write") {
-        var information = '<div class="mdui-textfield mdui-textfield-floating-label" style="margin-top: -15px;"><label class="mdui-textfield-label">答案</label><input id="check_input-' + index.toString() + '" class="mdui-textfield-input" type="text" required/><div class="mdui-textfield-error">答案错误</div></div>'
+        var information = '<div class="mdui-textfield" style="margin-top: -15px;"><label class="mdui-textfield-label">答案</label><input id="check_input-' + index.toString() + '" class="mdui-textfield-input" type="text" required/><div class="mdui-textfield-error">答案错误</div></div>'
       }
       else if (name=="exams_others") {
         var newh3 = document.createElement("h3");
         newh3.innerHTML = thisdata[index].type;
         parent.appendChild(newh3);
         if (thisdata[index].type.indexOf("赏析题")!=-1) {
-          var information = '<div class="mdui-textfield mdui-textfield-floating-label" style="margin-top: -15px;"><label class="mdui-textfield-label">答案</label><input id="check_input-' + index.toString() + '" class="mdui-textfield-input" type="text" required/><div class="mdui-textfield-error">答案错误</div></div>'
+          var information = '<div class="mdui-textfield" style="margin-top: -15px;"><label class="mdui-textfield-label">答案</label><input id="check_input-' + index.toString() + '" class="mdui-textfield-input" type="text" required/><div class="mdui-textfield-error">答案错误</div></div>'
         }
         else {
           var information = '';
